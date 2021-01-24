@@ -45,3 +45,23 @@ ntl dev
 ### Visit
 
 `localhost:8888/.netlify/functions/hello-world`.
+
+## Deploy Serverless Functions to Production on Netlify using the Netlify CLI
+
+```bash
+ntl login      ## login
+ntl status     ## verify
+```
+
+Netlify makes deploying to production a breeze by configuring your Netlify CLI to your Netlify account and integrating with GitHub.
+
+We'll log in to Netlify through the CLI and initialize a site by completing all the options that the CLI runs us through. Once this is done, Netlify will trigger new builds for your site every time you push to GitHub.
+
+```bash
+ntl init  ## select "Create new site"/"No Command/public folder"
+ntl open  ## open the site
+```
+
+or you can do the same thing on the netlify website.
+
+## Circumvent CORS when Accessing a Third-Party API using Netlify Functions
