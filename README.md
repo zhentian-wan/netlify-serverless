@@ -65,3 +65,44 @@ ntl open  ## open the site
 or you can do the same thing on the netlify website.
 
 ## Circumvent CORS when Accessing a Third-Party API using Netlify Functions
+
+CORS limits websites from communicating with other domains without the full consent of both sites. Consuming data from a 3rd Party REST API makes it difficult since we can't properly configure the appropriate CORS headers. To solve this, we'll set up a proxy server to request the data using a Netlify function that avoids CORS altogether.
+
+The Third-Party API that we'll be working with will provide the following data: id, name, favoriteSong for each corgi.
+
+http://no-cors-api.netlify.app/api/corgis
+
+We will also use node-fetch a light-weight module that brings the fetch API to fetch the data into our application.
+
+functions/load-corgis.js
+
+```js
+const fetch = require("node-fetch");
+exports.handler = async () => {
+  const result = await fetch(
+    "http://no-cors-api.netlify.app/api/corgis"
+  ).then((res) => res.json());
+
+  return {
+    statusCode: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(result),
+  };
+};
+```
+
+public/index.html:
+
+```js
+function loadCorgis() {
+    const conrgis = await fetch('/.netlify/functions/load-corgis') // load from local functions, to avoid CORS problem
+        .then(res => res.json());
+
+    render(
+    html` ${corgis.map((corgi) => html` <${Corgi} corgi=${corgi} /> `)}`,
+    document.querySelector('.corgis'),
+    );
+}
+```
