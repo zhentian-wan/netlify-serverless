@@ -106,3 +106,29 @@ function loadCorgis() {
     );
 }
 ```
+
+## Import and Set Environment Variables from a .env file using Netlify CLI
+
+Create a `.env` file. It is available for myself to use.
+
+But if I want to share with the team. We need to share this `.env` file.
+
+```bash
+netlify env:import .env
+```
+
+If successfully imported: you will see:
+
+```bash
+.----------------------------.
+| Imported environment variables |
+|----------------------------|
+|    Key     |     Value     |
+|------------|---------------|
+| TEST_VALUE | an test world |
+'----------------------------'
+```
+
+The `.env` has been uploaded to netlify and saved there. Now even you delete the .env file, it will still be available.
+
+

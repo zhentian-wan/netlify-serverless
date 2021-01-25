@@ -133,8 +133,8 @@
         `;
       }
 
-      function loadCorgis() {
-        const conrgis = await fetch('/.netlify/functions/load-corgis')
+      async function loadCorgis() {
+        const corgis = await fetch('/.netlify/functions/load-corgis')
             .then(res => res.json());
 
         render(
