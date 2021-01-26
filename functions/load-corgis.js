@@ -49,11 +49,41 @@ exports.handler = async () => {
     };
   });
 */
+
+const hasuraPromise = hasuraRequest({
+  query: `
+    mutation InsertOrUpdateBoops($corgis: [boops_insert_input!]!) {
+      boops: insert_boops(objects: $corgis, on_conflict: {constraint: boops_pkey, update_columns: id}) {
+        returning {
+          count
+          id
+        }
+      }
+    }
+  `,
+  variables: {
+    corgis: corgis.map(({ id }) => ({ id, count: 0 })),
+  },
+});
+
+const [hasuraData] = await Promise.all([
+  hasuraPromise
+]);
+
+const completeData = corgis.map((corgi) => {
+  const boops = hasuraData.boops.returning.find((b) => b.id === corgi.id);
+
+  return {
+    ...corgi,
+    boops: boops.count,
+  };
+});
+
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(corgis), // completeData
+    body: JSON.stringify(completeData),
   };
 };
